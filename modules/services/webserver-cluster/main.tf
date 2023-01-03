@@ -21,7 +21,7 @@ provider "aws" {
 # ASG
 resource "aws_launch_configuration" "test" {
     image_id         = "ami-0283a57753b18025b"
-    instance_type    =  "t2.micro"
+    instance_type    =  var.instance_type
     security_groups  = [aws_security_group.instance.id]
     user_data        = data.template_file.user_data.rendered
 
@@ -108,7 +108,7 @@ resource "aws_lb_listener" "http" {
 }
 
 resource "aws_security_group" "alb" {
-    name = "terraform-test-alb"
+    name = "${var.cluster_name}-alb"
 
     ingress {
         from_port = 80
@@ -165,8 +165,8 @@ data "terraform_remote_state" "db" {
     backend = "s3"
 
     config = {
-        bucket = "terraform-up-and-running-state-nks"
-        key    = "stage/data-stores/mysql/terraform.tfstate"
+        bucket = var.db_remote_state_bucket
+        key    = var.db_remote_state_key
         region = "us-east-2"
     }
   
