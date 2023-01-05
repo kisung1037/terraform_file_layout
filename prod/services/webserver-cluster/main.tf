@@ -5,7 +5,7 @@ provider "aws" {
 module "webserver_cluster" {
     source = "../../../modules/services/webserver-cluster"
 
-    clsuter_name           = "webservers-prod"
+    cluster_name           = "webservers-prod"
     db_remote_state_bucket = "terraform-up-and-running-state-nks"
     db_remote_state_key    = "prod/data-stores/mysql/terraform.tfstate"
 
@@ -32,4 +32,14 @@ resource "aws_autoscaling_schedule" "scale_in_at_night" {
     recurrence       = "0 17 * * *"
 
     autoscaling_group_name = module.webserver_cluster.asg_name
+}
+
+resource "aws_security_group_rule" "allow_testing_inbound" {
+    type = "ingress"
+    security_group_id = module.webserver_cluster.alb_security_group_id
+
+    from_port = 8080
+    to_port = 8080
+    protocol = "tcp"
+    cidr_blocks = [ "0.0.0.0/0" ]
 }

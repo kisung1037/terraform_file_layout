@@ -4,3 +4,9 @@ terraform.tfstate.backup
 .terraform/*
 stage/data-stores/mysql/.terraform/providers/registry.terraform.io/hashicorp/aws/4.48.0/windows_amd64/terraform-provider-aws_v4.48.0_x5.exe
 stage/data-stores/mysql/.terraform/providers/registry.terraform.io/hashicorp/aws/4.48.0/windows_386/terraform-provider-aws_v4.48.0_x5.exe
+prod/data-stores/mysql/.terraform/providers/registry.terraform.io/hashicorp/aws/4.48.0/windows_386/terraform-provider-aws_v4.48.0_x5.exe
+prod/services/webserver-cluster/.terraform.tfstate.lock.info
+stage/service/webserver-cluster/.terraform.tfstate.lock.info
+prod/services/webserver-cluster/.terraform/providers/registry.terraform.io/hashicorp/template/2.2.0/windows_386/terraform-provider-template_v2.2.0_x4.exe
+prod/services/webserver-cluster/.terraform/providers/registry.terraform.io/hashicorp/aws/4.48.0/windows_386/terraform-provider-aws_v4.48.0_x5.exe
+prod/services/webserver-cluster/.terraform/modules/modules.json

@@ -48,7 +48,7 @@ resource "aws_launch_configuration" "test" {
 }
 
 resource "aws_security_group" "instance" {
-    name = "terraform-test-instance"
+    name = "terraform-${var.cluster_name}"
 
     ingress {
         from_port   = var.server_port
@@ -72,7 +72,7 @@ resource "aws_autoscaling_group" "test" {
 
     tag {
         key = "Name"
-        value = var.clsuter_name
+        value = var.cluster_name
         propagate_at_launch = true
     }
   
@@ -94,7 +94,7 @@ data "aws_subnet_ids" "default" {
 # 
 
 resource "aws_lb" "test" {
-    name = "terraform-asg-test"
+    name = "terraform-asg-${var.cluster_name}"
     load_balancer_type = "application"
     subnets = data.aws_subnet_ids.default.ids
     security_groups = [aws_security_group.alb.id ]
@@ -146,7 +146,7 @@ resource "aws_security_group_rule" "allow_http_inbound" {
     from_port         =  local.http_port
     to_port           =  local.http_port
     protocol          =  local.tcp_protocol
-    cipv6_cidr_blocks =  local.all_ips
+    cidr_blocks =  local.all_ips
 }
 
 resource "aws_security_group_rule" "allow_all_outbound" {
@@ -156,13 +156,13 @@ resource "aws_security_group_rule" "allow_all_outbound" {
     from_port         =  local.any_port
     to_port           =  local.any_port
     protocol          =  local.any_porotocol
-    cipv6_cidr_blocks =  local.all_ips
+    cidr_blocks =  local.all_ips
   
 }
 
 
 resource "aws_lb_target_group" "test" {
-    name            = "terraform-asg-test"
+    name            = "terraform-asg-${var.cluster_name}"
     port            = var.server_port
     protocol        = "HTTP"
     vpc_id          = data.aws_vpc.default.id
