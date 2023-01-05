@@ -19,6 +19,15 @@ provider "aws" {
 # }
 
 # ASG
+
+locals {
+  http_port     = 80
+  any_port      = 0
+  any_porotocol = -1
+  tcp_protocol  = "tcp"
+  all_ips       = ["0.0.0.0/0"]
+}
+
 resource "aws_launch_configuration" "test" {
     image_id         = "ami-0283a57753b18025b"
     instance_type    =  var.instance_type
@@ -44,8 +53,8 @@ resource "aws_security_group" "instance" {
     ingress {
         from_port   = var.server_port
         to_port     = var.server_port
-        protocol    = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
+        protocol    = local.tcp_protocol
+        cidr_blocks = local.all_ips
     }
 }
 
@@ -58,12 +67,12 @@ resource "aws_autoscaling_group" "test" {
     target_group_arns = [aws_lb_target_group.test.arn]
     health_check_type = "ELB"
 
-    min_size = 1
-    max_size = 10
+    min_size = var.min_size
+    max_size = var.max_size
 
     tag {
         key = "Name"
-        value = "terraform-asg-test"
+        value = var.clsuter_name
         propagate_at_launch = true
     }
   
@@ -93,7 +102,7 @@ resource "aws_lb" "test" {
 
 resource "aws_lb_listener" "http" {
     load_balancer_arn = aws_lb.test.arn
-    port              = 80
+    port              = local.http_port
     protocol          = "HTTP"  
 
     default_action {
@@ -107,24 +116,50 @@ resource "aws_lb_listener" "http" {
     }
 }
 
+# resource "aws_security_group" "alb" {
+#     name = "${var.cluster_name}-alb"
+
+#     ingress {
+#         from_port = 80
+#         to_port = 80
+#         protocol = "tcp"
+#         cidr_blocks = [ "0.0.0.0/0" ]
+#     }
+
+#     egress {
+#         from_port = 0
+#         to_port = 0
+#         protocol = "-1"
+#         cidr_blocks = [ "0.0.0.0/0" ]
+#     }
+  
+# }
+
 resource "aws_security_group" "alb" {
-    name = "${var.cluster_name}-alb"
+    name = "${var.cluster_name}-alb"  
+}
 
-    ingress {
-        from_port = 80
-        to_port = 80
-        protocol = "tcp"
-        cidr_blocks = [ "0.0.0.0/0" ]
-    }
+resource "aws_security_group_rule" "allow_http_inbound" {
+    type              = "ingress"
+    security_group_id = aws_security_group.alb.id
 
-    egress {
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
-        cidr_blocks = [ "0.0.0.0/0" ]
-    }
+    from_port         =  local.http_port
+    to_port           =  local.http_port
+    protocol          =  local.tcp_protocol
+    cipv6_cidr_blocks =  local.all_ips
+}
+
+resource "aws_security_group_rule" "allow_all_outbound" {
+    type              = "egress"
+    security_group_id = aws_security_group.alb.id
+
+    from_port         =  local.any_port
+    to_port           =  local.any_port
+    protocol          =  local.any_porotocol
+    cipv6_cidr_blocks =  local.all_ips
   
 }
+
 
 resource "aws_lb_target_group" "test" {
     name            = "terraform-asg-test"
@@ -173,12 +208,11 @@ data "terraform_remote_state" "db" {
 }
 
 data "template_file" "user_data" {
-    template = file("user-data.sh")
+    template = file("${path.module}/user-data.sh")
 
     vars = {
         server_port = var.server_port
         db_address  = data.terraform_remote_state.db.outputs.address
         db_port     = data.terraform_remote_state.db.outputs.port
     }
-  
 }
