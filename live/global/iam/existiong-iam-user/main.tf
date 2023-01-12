@@ -3,6 +3,10 @@ provider "aws" {
 }
 
 resource "aws_iam_user" "example" {
-    count = 3
-    name = "neo.${count.index}"
+    count = length(var.user_names)
+    name = var.user_names[count.index]
+}
+
+output "all_arns" {
+    value = aws_iam_user.example[*].arn
 }

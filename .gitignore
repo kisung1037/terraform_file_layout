@@ -9,3 +9,5 @@ live/stage/data-stores/mysql/errored.tfstate
 live/stage/service/webserver-cluster/.terraform/modules/modules.json
 live/prod/data-stores/mysql/.terraform/providers/registry.terraform.io/hashicorp/aws/4.48.0/windows_386/terraform-provider-aws_v4.48.0_x5.exe
 live/global/iam/existiong-iam-user/.terraform/providers/registry.terraform.io/hashicorp/aws/4.49.0/windows_386/terraform-provider-aws_v4.49.0_x5.exe
+live/prod/services/webserver-cluster/.terraform/modules/modules.json
+live/stage/service/webserver-cluster/.terraform/modules/modules.json
