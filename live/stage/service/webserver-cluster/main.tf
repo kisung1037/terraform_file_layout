@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "webserver_cluster" {
-    source = "github.com/kisung1037/terraform_upNrunning_modules//services/webserver-cluster?ref=v0.0.1"
+    source = "github.com/kisung1037/terraform_upNrunning_modules//services/webserver-cluster"
 
     cluster_name           = "webservers-stage"
     db_remote_state_bucket = "terraform-up-and-running-state-nks"

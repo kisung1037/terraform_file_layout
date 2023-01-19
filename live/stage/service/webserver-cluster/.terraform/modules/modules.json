@@ -1,1 +1,1 @@
-{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"webserver_cluster","Source":"git::https://github.com/kisung1037/terraform_upNrunning_modules.git?ref=v0.0.1//services/webserver-cluster","Dir":".terraform/modules/webserver_cluster/services/webserver-cluster"}]}
+{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"webserver_cluster","Source":"git::https://github.com/kisung1037/terraform_upNrunning_modules.git//services/webserver-cluster","Dir":".terraform/modules/webserver_cluster/services/webserver-cluster"}]}
