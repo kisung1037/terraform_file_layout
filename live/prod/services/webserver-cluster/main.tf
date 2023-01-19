@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "webserver_cluster" {
-    source = "github.com/kisung1037/terraform_upNrunning_modules//services/webserver-cluster?ref=v0.0.1"
+    source = "../../../../modules/services/webserver-cluster"
 
     cluster_name           = "webservers-prod"
     db_remote_state_bucket = "terraform-up-and-running-state-nks"
@@ -12,6 +12,11 @@ module "webserver_cluster" {
     instance_type = "t2.micro"
     min_size      = 1
     max_size      = 2
+
+    custom_tags = {
+        Owner      = "team-foo"
+        DeployedBy = "terraform"
+    }
 }
 
 resource "aws_autoscaling_schedule" "scale_out_during_business_hours" {
