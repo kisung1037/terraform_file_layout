@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "webserver_cluster" {
-    source = "../../../modules/services/webserver-cluster"
+    source = "github.com/kisung1037/terraform_upNrunning_modules//services/webserver-cluster"
 
     cluster_name           = "webservers-stage"
     db_remote_state_bucket = "terraform-up-and-running-state-nks"
@@ -12,6 +12,7 @@ module "webserver_cluster" {
     instance_type = "t2.micro"
     min_size      = 1
     max_size      = 2
+    enable_autoscaling = false
 }
 
 resource "aws_security_group_rule" "allow_testing_inbound" {

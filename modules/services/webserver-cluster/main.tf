@@ -74,8 +74,41 @@ resource "aws_autoscaling_group" "test" {
         key = "Name"
         value = var.cluster_name
         propagate_at_launch = true
-    }  
+    }
+    dynamic "tag" {
+        for_each = var.custom_tags
+    
+        content {
+            key                 = tag.key
+            value               = tag.value
+            propagate_at_launch = true
+        } 
+    }
 }
+
+resource "aws_autoscaling_schedule" "scale_out_during_business_hours" {
+    count = var.enable_autoscaling? 1 : 0
+
+    scheduled_action_name = "${var.cluster_name}-scale-out-during-business-hours"
+    min_size = 2
+    max_size = 10
+    desired_capacity = 10
+    recurrence = "0 9 * * *"
+    autoscaling_group_name = aws_autoscaling_group.test.name
+}
+
+resource "aws_autoscaling_schedule" "scale_in_at_night" {
+    count = var.enable_autoscaling? 1 : 0
+
+    scheduled_action_name = "${var.cluster_name}-scale_in_at_night"
+    min_size = 2
+    max_size = 10
+    desired_capacity = 2
+    recurrence = "0 17 * * *"
+    autoscaling_group_name = aws_autoscaling_group.test.name
+}
+
+
 
 data "aws_vpc" "default" {
     default = true
@@ -213,5 +246,32 @@ data "template_file" "user_data" {
         server_port = var.server_port
         db_address  = data.terraform_remote_state.db.outputs.address
         db_port     = data.terraform_remote_state.db.outputs.port
+    }
+}
+
+resource "aws_cloudwatch_metric_alarm" "high_cpu_utilizaion" {
+    alarm_name = "${var.cluster_name}-high-cpu-utilizion"
+    namespace = "AWS/EC2"
+    metric_name = "CPUUtilizaion"
+
+    dimensions = {
+      AutoScalingGroupName = aws_autoscaling_group.test.name
+    }
+
+    comparison_operator = "GreaterThanThreshold"
+    evaluation_periods  = 1
+    period              = 300
+    statistic           = "Average"
+    threshold           = 90
+    unit                = "Percent"
+}
+
+resource "aws_cloudwatch_metric_alarm" "low_cpu_credit_balance" {
+    alarm_name = "${var.cluster_name}-low-cpu-credit-balance"
+    namespace = "AWS/EC2"
+    metric_name = "CPUCreditBalance"
+
+    dimensions = {
+        AutoScalingGroupName = aws_autoscaling_group.test.name
     }
 }
