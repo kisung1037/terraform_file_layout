@@ -6,10 +6,13 @@ live/stage/data-stores/mysql/.terraform/providers/registry.terraform.io/hashicor
 live/prod/services/webserver-cluster/.terraform/providers/registry.terraform.io/hashicorp/template/2.2.0/windows_386/terraform-provider-template_v2.2.0_x4.exe
 live/prod/services/webserver-cluster/.terraform/providers/registry.terraform.io/hashicorp/aws/4.48.0/windows_386/terraform-provider-aws_v4.48.0_x5.exe
 <<<<<<< HEAD
+<<<<<<< HEAD
 stage/data-stores/mysql/.terraform/providers/registry.terraform.io/hashicorp/aws/4.48.0/windows_amd64/terraform-provider-aws_v4.48.0_x5.exe
 stage/service/webserver-cluster/.terraform/providers/registry.terraform.io/hashicorp/aws/4.48.0/windows_amd64/terraform-provider-aws_v4.48.0_x5.exe
 live/stage/data-stores/mysql/.terraform/providers/registry.terraform.io/hashicorp/aws/4.49.0/windows_amd64/terraform-provider-aws_v4.49.0_x5.exe
 =======
+=======
+>>>>>>> d0b4abce6cc41cdded5f03229212caa1df306ac0
 live/stage/data-stores/mysql/errored.tfstate
 live/stage/service/webserver-cluster/.terraform/modules/modules.json
 live/prod/data-stores/mysql/.terraform/providers/registry.terraform.io/hashicorp/aws/4.48.0/windows_386/terraform-provider-aws_v4.48.0_x5.exe
@@ -17,4 +20,7 @@ live/global/iam/existiong-iam-user/.terraform/providers/registry.terraform.io/ha
 live/prod/services/webserver-cluster/.terraform/modules/modules.json
 live/stage/service/webserver-cluster/.terraform/modules/modules.json
 live/prod/services/webserver-cluster/.terraform.tfstate.lock.info
+<<<<<<< HEAD
+>>>>>>> d0b4abce6cc41cdded5f03229212caa1df306ac0
+=======
 >>>>>>> d0b4abce6cc41cdded5f03229212caa1df306ac0
